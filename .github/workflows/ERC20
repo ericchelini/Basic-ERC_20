@@ -1,0 +1,46 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+
+contract MyToken is ERC20, Ownable {
+    event Transfer(address indexed _from, address indexed _to, uint256 _value);
+    event Approval(address indexed _owner, address indexed _spender, uint256 _value);
+
+    constructor(uint256 initialSupply) ERC20("MyToken", "MYT") {
+        _mint(msg.sender, initialSupply);
+    }
+
+    function totalSupply() public view virtual override returns (uint256) {
+        return super.totalSupply();
+    }
+
+    function balanceOf(address account) public view virtual override returns (uint256) {
+        return super.balanceOf(account);
+    }
+
+    function transfer(address recipient, uint256 amount) public virtual override returns (bool) {
+        bool success = super.transfer(recipient, amount);
+        if (success) {
+            emit Transfer(msg.sender, recipient, amount);
+        }
+        return success;
+    }
+
+    function approve(address spender, uint256 amount) public virtual override returns (bool) {
+        bool success = super.approve(spender, amount);
+        if (success) {
+            emit Approval(msg.sender, spender, amount);
+        }
+        return success;
+    }
+
+    function transferFrom(address sender, address recipient, uint256 amount) public virtual override returns (bool) {
+        bool success = super.transferFrom(sender, recipient, amount);
+        if (success) {
+            emit Transfer(sender, recipient, amount);
+        }
+        return success;
+    }
+}
